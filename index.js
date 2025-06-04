@@ -1,51 +1,30 @@
-import express from 'express'
-import mongoose from 'mongoose'
-import cors from 'cors';
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
+import dotenv from 'dotenv';
+import userRouter from "./routes/userRoutes.js";
+import productRouter from "./routes/productRoutes.js";
+import orderRouter from "./routes/orderRoutes.js";
+
+dotenv.config();
+
 const app = express();
-app.listen(8080, () => {
-  mongoose.connect("mongodb://localhost:27017/gcet");
-  console.log('Server Started');
-});
-
-const userSchema = mongoose.Schema({
-  name: { type: String },
-});
-
-const user = mongoose.model('user', userSchema);
-
 app.use(cors());
-app.get("/", async(req, res) => {
- return res.send("Good Morning");
-});
+app.use(express.json());
 
-app.get("/register", async(req, res) => {
- const result = await user.create({ name: "Shivani Bajjuri"});
- return res.json(result);
-});
+const MONGO_URI = process.env.MONGO_URI
 
-app.get("/greet", (req,res) => {res.send("Greetings!")});
+app.use("/users", userRouter);
+app.use("/products", productRouter);
+app.use("/orders",orderRouter)
 
-app.get("/name", (req,res) => {res.send("Shivani Bajjuri")});
-
-app.get("/weather", (req,res) => {res.send("31°C")});
-
-app.get("/products", (req, res) => {
-  const products = [
-    { name: "Product 1", price: 34 },
-    { name: "Product 2", price: 64 },
-    { name: "Product 3", price: 45 },
-  ];
-  res.json(products);
-});
-
-
-
-
-
-
-
-
-
-
-
-
+mongoose
+  .connect(MONGO_URI)
+  .then(() => {
+    app.listen(8080, () => {
+      console.log("Server Started on port 8080");
+    });
+  })
+  .catch((error) => {
+    console.log(error);
+  });
