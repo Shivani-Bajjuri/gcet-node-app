@@ -8,4 +8,10 @@ productRouter.get("/all", async (req, res) => {
   res.json(products);
 });
 
+productRouter.post('/new', async (req, res) => {
+  const product = new productModel(req.body);
+  const saved = await product.save();
+  res.status(201).json(saved);
+});
+
 export default productRouter
