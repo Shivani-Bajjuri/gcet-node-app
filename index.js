@@ -15,7 +15,7 @@ app.use(express.json());
 const MONGO_URI = process.env.MONGODB_URI
 
 app.use("/users", userRouter);
-app.use("/products", productRouter);
+app.use("/product", productRouter);
 app.use("/orders",orderRouter)
 
 mongoose
