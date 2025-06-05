@@ -5,7 +5,7 @@ orderRouter.get('/', async (req, res) => {
   const orders = await ordersModel.find();
   res.json(orders);
 });
-orderRouter.get('/:email', async (req, res) => {
+orderRouter.get('/email', async (req, res) => {
   const email = req.params.email;
   const orders = await ordersModel .find({ email });
   res.json(orders);
